@@ -1,0 +1,10 @@
+{
+  "buildCommand": "bundle install && bin/rails assets:precompile",
+  "outputDirectory": "public",
+  "framework": "ruby",
+  "regions": ["iad1"],
+  "env": {
+    "RAILS_ENV": "production",
+    "RACK_ENV": "production"
+  }
+}
