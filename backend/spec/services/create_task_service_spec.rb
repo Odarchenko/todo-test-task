@@ -16,23 +16,27 @@ RSpec.describe CreateTaskService do
         expect(subject).to eq(created_task)
       end
 
-      it 'returns the created task object' do
-        created_task = subject
-        expect(created_task).to be_a(Task)
-        expect(created_task.title).to eq('New Task')
-        expect(created_task.description).to eq('Task description')
-        expect(created_task.completed).to be_falsey
+      it 'creates a task with the correct attributes' do
+        subject
+
+        expect(created_task).to have_attributes(
+          title: 'New Task',
+          description: 'Task description',
+          completed: false
+        )
       end
     end
 
     context 'when the parameters are invalid' do
       let(:params) { { title: '', description: 'Task description', completed: false  } }
 
-      it 'does not create a task and returns the task object with errors' do
-        task = subject
-        expect(task).to be_a(Task)
-        expect(task.errors.full_messages).to include("Title can't be blank")
-        expect(Task.count).to eq(0)  # Ensure no task was created
+      it 'does not create a task' do
+        expect { subject }.not_to change(Task, :count)
+      end
+
+      it 'returns the task object with errors' do
+        expect(subject).to be_a(Task)
+        expect(subject.errors.full_messages).to include("Title can't be blank")
       end
     end
   end
