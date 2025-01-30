@@ -48,10 +48,9 @@ Before you begin, ensure you have the following installed:
 
 ## API Endpoints
 
-- **GET /api/v1/tasks**: Retrieve all tasks.
-- **POST /api/v1/tasks**: Create a new task.
-- **PATCH /api/v1/tasks/:id**: Update an existing task.
-- **DELETE /api/v1/tasks/:id**: Delete a task.
+You can find the API documentation at [https://todo-test-task-production.up.railway.app/api-docs/index.html](https://todo-test-task-production.up.railway.app/api-docs/index.html). This documentation includes details about the available endpoints and their usage.
+
+Additionally, the CI pipeline includes linters such as ESLint for JavaScript and RuboCop for Ruby to ensure code quality and adherence to best practices.
 
 ## Testing
 

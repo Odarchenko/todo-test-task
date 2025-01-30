@@ -1,0 +1,3 @@
+Rswag::Api.configure do |config|
+  config.openapi_root = Rails.root.to_s + "/swagger"
+end
