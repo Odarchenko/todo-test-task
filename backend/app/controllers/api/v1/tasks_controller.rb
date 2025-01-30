@@ -46,7 +46,7 @@ module Api
       end
 
       def record_not_found
-        render json: { error: "Task not found" }, status: :not_found
+        render json: { errors: "Task not found" }, status: :not_found
       end
     end
   end

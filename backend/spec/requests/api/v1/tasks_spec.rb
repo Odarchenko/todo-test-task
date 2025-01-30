@@ -1,92 +1,113 @@
-# backend/spec/integration/tasks_spec.rb
-require 'swagger_helper'
+RSpec.describe 'Tasks API', type: :request do
+  let(:task_id) { tasks.first.id }
 
-RSpec.describe 'API V1 Tasks', type: :request do
-  path '/api/v1/tasks' do
-    get 'Retrieves all tasks' do
-      tags 'Tasks'
-      produces 'application/json'
+  describe 'GET /api/v1/tasks' do
+    let!(:task_a) { create(:task, title: 'Task A', description: 'Task A description', completed: false) }
+    let!(:task_b) { create(:task, title: 'Task B', description: 'Task B description', completed: false) }
+    let!(:task_c) { create(:task, title: 'Task C', description: 'Task C description', completed: false) }
 
-      response '200', 'tasks found' do
-        schema type: :array, items: {
-          type: :object,
-          properties: {
-            id: { type: :integer },
-            title: { type: :string },
-            description: { type: :string },
-            completed: { type: :boolean }
-          },
-          required: [ 'id', 'title', 'description', 'completed' ]
+    before { get '/api/v1/tasks' }
+
+    it 'returns tasks' do
+      parsed_json = JSON.parse(response.body)
+
+      expect(response).to have_http_status(:ok)
+      expect(parsed_json.size).to eq(3)
+      expect(parsed_json).to eq([
+        {
+          "id" => task_a.id,
+          "title" => 'Task A',
+          "description" => 'Task A description',
+          "completed" => false
+        },
+        {
+          "id" => task_b.id,
+          "title" => 'Task B',
+          "description" => 'Task B description',
+          "completed" => false
+        },
+        {
+          "id" => task_c.id,
+          "title" => 'Task C',
+          "description" => 'Task C description',
+          "completed" => false
         }
+      ])
+    end
+  end
 
-        run_test!
+  describe 'POST /api/v1/tasks' do
+    context 'when the request is valid' do
+      let(:params) { { task: { title: 'New Task', description: 'Task description' } } }
+
+      before { post '/api/v1/tasks', params: params }
+
+      it 'creates a task' do
+        parsed_json = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:created)
+        expect(parsed_json).to eq({
+          "id" => Task.last.id,
+          "title" => 'New Task',
+          "description" => 'Task description',
+          "completed" => false
+        })
       end
     end
 
-    post 'Creates a task' do
-      tags 'Tasks'
-      consumes 'application/json'
-      parameter name: :task, in: :body, schema: {
-        type: :object,
-        properties: {
-          title: { type: :string },
-          description: { type: :string },
-          completed: { type: :boolean }
-        },
-        required: [ 'title', 'description' ]
-      }
+    context 'when the request is invalid' do
+      before { post '/api/v1/tasks', params: { task: { title: '', description: 'Task description' } } }
 
-      response '201', 'task created' do
-        let(:task) { { title: 'New Task', description: 'Task description', completed: false } }
-        run_test!
-      end
+      it 'returns a validation failure message' do
+        parsed_json = JSON.parse(response.body)
 
-      response '422', 'invalid request' do
-        let(:task) { { title: nil } }
-        run_test!
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(parsed_json['errors']).to include("Title can't be blank")
       end
     end
   end
 
-  path '/api/v1/tasks/{id}' do
-    parameter name: :id, in: :path, type: :integer
+  describe 'PUT /api/v1/tasks/:id' do
+    let(:task) { create(:task) }
+    let(:params) { { task: { title: 'Updated Task' } } }
 
-    patch 'Updates a task' do
-      tags 'Tasks'
-      consumes 'application/json'
-      parameter name: :task, in: :body, schema: {
-        type: :object,
-        properties: {
-          title: { type: :string },
-          description: { type: :string },
-          completed: { type: :boolean }
-        }
-      }
+    context 'when the task exists' do
+      before { put "/api/v1/tasks/#{task.id}", params: params }
 
-      response '200', 'task updated' do
-        let(:id) { Task.create(title: 'Test Task', description: 'Test Description', completed: false).id }
-        let(:task) { { title: 'Updated Task' } }
-        run_test!
-      end
+      it 'updates the task' do
+        parsed_json = JSON.parse(response.body)
 
-      response '404', 'task not found' do
-        let(:id) { 'invalid' }
-        let(:task) { { title: 'Updated Task' } }
-        run_test!
+        expect(response).to have_http_status(:ok)
+        expect(parsed_json).to eq({
+          "id" => task.id,
+          "title" => 'Updated Task',
+          "description" => task.description,
+          "completed" => task.completed
+        })
       end
     end
 
-    delete 'Deletes a task' do
-      tags 'Tasks'
+    context 'when the task does not exist' do
+      let(:task_id) { 0 }
 
-      response '204', 'task deleted' do
-        let(:id) { Task.create(title: 'Test Task', description: 'Test Description', completed: false).id }
-        run_test!
-      end
+      before { put "/api/v1/tasks/#{task_id}", params: params }
 
-      response '404', 'task not found' do
-        let(:id) { 'invalid' }
+      it 'returns a not found message' do
+        parsed_json = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:not_found)
+        expect(parsed_json['errors']).to include("Task not found")
       end
+    end
+  end
+
+  describe 'DELETE /api/v1/tasks/:id' do
+    let(:task) { create(:task) }
+
+    before { delete "/api/v1/tasks/#{task.id}" }
+
+    it 'deletes the task' do
+      expect(response).to have_http_status(:no_content)
     end
   end
 end

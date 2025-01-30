@@ -19,11 +19,18 @@ Before you begin, ensure you have the following installed:
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone git@github.com:Odarchenko/todo-test-task.git
+   cd todo-test-task
    ```
 
-2. **Install dependencies**:
+2. **Set up environment variables**:
+   Create a `.env` file in the `backend` directory. You can use the `.env.example` file as a reference for the required environment variables.
+   ```bash
+   cd backend
+   cp .env.example .env
+   ```
+
+3. **Install dependencies**:
    ```bash
    cd backend
    bundle install
@@ -31,26 +38,24 @@ Before you begin, ensure you have the following installed:
    npm install
    ```
 
-3. **Set up the database**:
+4. **Set up the database**:
    ```bash
    cd backend
    rails db:create
    rails db:migrate
    ```
 
-4. **Start the development server**:
+5. **Start the development server**:
    ```bash
    foreman start -f Procfile.dev
    ```
 
-5. **Access the application**:
+6. **Access the application**:
    Open your browser and go to [http://localhost:3000](http://localhost:3000).
 
 ## API Endpoints
 
 You can find the API documentation at [https://todo-test-task-production.up.railway.app/api-docs/index.html](https://todo-test-task-production.up.railway.app/api-docs/index.html). This documentation includes details about the available endpoints and their usage.
-
-Additionally, the CI pipeline includes linters such as ESLint for JavaScript and RuboCop for Ruby to ensure code quality and adherence to best practices.
 
 ## Testing
 
@@ -66,7 +71,33 @@ To run the tests for the frontend, navigate to the `frontend` directory and run:
 npm test
 ```
 
+## Linter
+
+To run the linter for the backend, navigate to the `backend` directory and run:
+
+```bash
+cd backend
+bundle exec rubocop
+```
+
+To run the linter for the frontend, navigate to the `frontend` directory and run:
+
+```bash
+cd frontend
+npm run lint
+```
+
+## Assumptions
+
+In the event that a large number of tasks are added to the application, we assume that pagination will be implemented to enhance user experience and performance. The concept of the solution includes:
+
+- **Frontend Pagination**: Implementing pagination controls in the React frontend to allow users to navigate through tasks easily.
+- **Backend Pagination**: Modifying the Rails API to support pagination, enabling the retrieval of a limited number of tasks per request.
+- **User Experience**: Ensuring that the pagination is intuitive and provides feedback to users about the total number of tasks and their current position within the list.
+
+This approach will help maintain performance and usability as the number of tasks grows.
+
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-

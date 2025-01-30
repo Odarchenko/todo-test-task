@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe TaskSerializer, type: :serializer do
   let(:task) { create(:task, title: 'Test Task', description: 'This is a test task', completed: false) }
   let(:serialized_task) { TaskSerializer.new(task).serializable_hash }
