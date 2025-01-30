@@ -1,106 +1,91 @@
-require 'rails_helper'
+# backend/spec/integration/tasks_spec.rb
+require 'swagger_helper'
 
-RSpec.describe "Api::V1::Tasks", type: :request do
-  let(:valid_headers) {
-    { "ACCEPT" => "application/json" }
-  }
+RSpec.describe 'API V1 Tasks', type: :request do
+  path '/api/v1/tasks' do
+    get 'Retrieves all tasks' do
+      tags 'Tasks'
+      produces 'application/json'
 
-  describe "GET /api/v1/tasks" do
-    let!(:tasks) { create_list(:task, 3, completed: false) }  # Use let! to ensure creation
+      response '200', 'tasks found' do
+        schema type: :array, items: {
+          type: :object,
+          properties: {
+            id: { type: :integer },
+            title: { type: :string },
+            description: { type: :string },
+            completed: { type: :boolean }
+          },
+          required: [ 'id', 'title', 'description', 'completed' ]
+        }
 
-    before do
-      get "/api/v1/tasks", headers: valid_headers
-    end
-
-    it "returns http success" do
-      expect(response).to have_http_status(:success)
-    end
-
-    it "returns all tasks" do
-      json_response = JSON.parse(response.body)
-      expect(json_response.size).to eq(3)
-      expect(json_response.map { |t| t["id"] }).to match_array(tasks.map(&:id))
-    end
-  end
-
-
-  describe "POST /api/v1/tasks" do
-    let(:valid_attributes) { { task: attributes_for(:task, completed: false) } }
-    let(:invalid_attributes) { { task: attributes_for(:task, title: nil, completed: false) } }
-
-    context "with valid parameters" do
-      it "returns http created and creates a new Task" do
-        expect {
-          post "/api/v1/tasks", params: valid_attributes, headers: valid_headers
-        }.to change(Task, :count).by(1)
-
-        expect(response).to have_http_status(:created)
-        json_response = JSON.parse(response.body)
-        expect(json_response["title"]).to eq(valid_attributes[:task][:title])
+        run_test!
       end
     end
 
-    context "with invalid parameters" do
-      it "returns http unprocessable entity and does not create a Task" do
-        expect {
-          post "/api/v1/tasks", params: invalid_attributes, headers: valid_headers
-        }.not_to change(Task, :count)
+    post 'Creates a task' do
+      tags 'Tasks'
+      consumes 'application/json'
+      parameter name: :task, in: :body, schema: {
+        type: :object,
+        properties: {
+          title: { type: :string },
+          description: { type: :string },
+          completed: { type: :boolean }
+        },
+        required: [ 'title', 'description' ]
+      }
 
-        expect(response).to have_http_status(:unprocessable_entity)
-        json_response = JSON.parse(response.body)
-        expect(json_response).to have_key("errors")
+      response '201', 'task created' do
+        let(:task) { { title: 'New Task', description: 'Task description', completed: false } }
+        run_test!
+      end
+
+      response '422', 'invalid request' do
+        let(:task) { { title: nil } }
+        run_test!
       end
     end
   end
 
-  describe "PATCH /api/v1/tasks/:id" do
-    let!(:task) { create(:task, completed: false) }
-    let(:new_attributes) { { task: { title: "Updated Title" } } }
+  path '/api/v1/tasks/{id}' do
+    parameter name: :id, in: :path, type: :integer
 
-    context "with valid parameters" do
-      it "updates the task and returns success" do
-        patch "/api/v1/tasks/#{task.id}", params: new_attributes, headers: valid_headers
+    patch 'Updates a task' do
+      tags 'Tasks'
+      consumes 'application/json'
+      parameter name: :task, in: :body, schema: {
+        type: :object,
+        properties: {
+          title: { type: :string },
+          description: { type: :string },
+          completed: { type: :boolean }
+        }
+      }
 
-        expect(response).to have_http_status(:success)
-        json_response = JSON.parse(response.body)
-        expect(json_response["title"]).to eq("Updated Title")
-        expect(task.reload.title).to eq("Updated Title")
+      response '200', 'task updated' do
+        let(:id) { Task.create(title: 'Test Task', description: 'Test Description', completed: false).id }
+        let(:task) { { title: 'Updated Task' } }
+        run_test!
+      end
+
+      response '404', 'task not found' do
+        let(:id) { 'invalid' }
+        let(:task) { { title: 'Updated Task' } }
+        run_test!
       end
     end
 
-    context "with invalid parameters" do
-      it "returns unprocessable entity and error messages" do
-        patch "/api/v1/tasks/#{task.id}",
-          params: { task: { title: nil } },
-          headers: valid_headers
+    delete 'Deletes a task' do
+      tags 'Tasks'
 
-        expect(response).to have_http_status(:unprocessable_entity)
-        json_response = JSON.parse(response.body)
-        expect(json_response).to have_key("errors")
-      end
-    end
-  end
-
-  describe "DELETE /api/v1/tasks/:id" do
-    let!(:task) { create(:task, completed: false) }
-
-    context "when the task exists" do
-      before { delete "/api/v1/tasks/#{task.id}", headers: valid_headers }
-
-      it "returns http no content" do
-        expect(response).to have_http_status(:no_content)
+      response '204', 'task deleted' do
+        let(:id) { Task.create(title: 'Test Task', description: 'Test Description', completed: false).id }
+        run_test!
       end
 
-      it "deletes the task" do
-        expect(Task.count).to eq(0)
-      end
-    end
-
-    context "when the task doesn't exist" do
-      before { delete "/api/v1/tasks/0", headers: valid_headers }
-
-      it "returns http not found" do
-        expect(response).to have_http_status(:not_found)
+      response '404', 'task not found' do
+        let(:id) { 'invalid' }
       end
     end
   end

@@ -8,14 +8,14 @@ module Api
       def index
         tasks = Task.all
 
-        render json: tasks
+        render json: tasks, each_serializer: TaskSerializer, status: :ok
       end
 
       def create
         task = ::CreateTaskService.new(task_params).call
 
         if task.errors.empty?
-          render json: task, status: :created
+          render json: TaskSerializer.new(task).serializable_hash, status: :created
         else
           render json: { errors: task.errors.full_messages }, status: :unprocessable_entity
         end
@@ -23,7 +23,7 @@ module Api
 
       def update
         if @task.update(task_params)
-          render json: @task
+          render json: TaskSerializer.new(@task).serializable_hash, status: :ok
         else
           render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
         end
