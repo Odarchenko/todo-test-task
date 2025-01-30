@@ -1,3 +1,4 @@
+[![CI](https://github.com/Odarchenko/todo-test-task/actions/workflows/main.yml/badge.svg)](https://github.com/Odarchenko/todo-test-task/actions/workflows/main.yml)
 # Todo Application
 
 A full-stack todo application built with React frontend and Rails API backend.
