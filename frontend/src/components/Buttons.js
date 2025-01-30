@@ -8,16 +8,10 @@ const Buttons = ({ todo, onStatusChange, onEdit, onDelete }) => (
     >
       {todo.completed ? 'Reopen' : 'Complete'}
     </Button>
-    <Button
-      variant="primary"
-      onClick={() => onEdit(todo)}
-    >
+    <Button variant="primary" onClick={() => onEdit(todo)}>
       Edit
     </Button>
-    <Button
-      variant="danger"
-      onClick={() => onDelete(todo.id)}
-    >
+    <Button variant="danger" onClick={() => onDelete(todo.id)}>
       Delete
     </Button>
   </div>

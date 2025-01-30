@@ -9,7 +9,8 @@ import { useTaskForm } from './hooks/useTaskForm';
 
 function App() {
   const { alert, setAlert, showAlert } = useAlert();
-  const { todos, setTodos, isLoading, handleDelete, handleStatusChange } = useTodos(showAlert);
+  const { todos, setTodos, isLoading, handleDelete, handleStatusChange } =
+    useTodos(showAlert);
   const {
     showModal,
     currentTodo,
@@ -17,7 +18,7 @@ function App() {
     handleShowModal,
     handleCloseModal,
     handleSubmit,
-    setFormData
+    setFormData,
   } = useTaskForm(todos, setTodos, showAlert);
 
   if (isLoading) {
@@ -26,7 +27,11 @@ function App() {
 
   return (
     <Container className="mt-4">
-      <Alert message={alert?.message} type={alert?.type} onClose={() => setAlert(null)} />
+      <Alert
+        message={alert?.message}
+        type={alert?.type}
+        onClose={() => setAlert(null)}
+      />
       <Header onAddClick={() => handleShowModal()} />
 
       <Tabs

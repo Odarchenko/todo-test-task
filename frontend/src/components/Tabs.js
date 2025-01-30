@@ -14,10 +14,10 @@ const Tabs = ({ todos, onStatusChange, onEdit, onDelete }) => (
     </Tab>
     <Tab
       eventKey="pending"
-      title={`Pending (${todos.filter(t => !t.completed).length})`}
+      title={`Pending (${todos.filter((t) => !t.completed).length})`}
     >
       <List
-        todos={todos.filter(todo => !todo.completed)}
+        todos={todos.filter((todo) => !todo.completed)}
         onStatusChange={onStatusChange}
         onEdit={onEdit}
         onDelete={onDelete}
@@ -25,10 +25,10 @@ const Tabs = ({ todos, onStatusChange, onEdit, onDelete }) => (
     </Tab>
     <Tab
       eventKey="finished"
-      title={`Finished (${todos.filter(t => t.completed).length})`}
+      title={`Finished (${todos.filter((t) => t.completed).length})`}
     >
       <List
-        todos={todos.filter(todo => todo.completed)}
+        todos={todos.filter((todo) => todo.completed)}
         onStatusChange={onStatusChange}
         onEdit={onEdit}
         onDelete={onDelete}
@@ -37,4 +37,4 @@ const Tabs = ({ todos, onStatusChange, onEdit, onDelete }) => (
   </BootstrapTabs>
 );
 
-export default  Tabs;
+export default Tabs;

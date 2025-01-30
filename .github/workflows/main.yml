@@ -63,28 +63,28 @@ jobs:
           cd backend
           bundle exec rspec
 
-  # frontend:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-  #     - name: Set up Node.js
-  #       uses: actions/setup-node@v2
-  #       with:
-  #         node-version: '14' # Specify your Node.js version here
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' # Specify your Node.js version here
 
-  #     - name: Install frontend dependencies
-  #       run: |
-  #         cd frontend
-  #         npm install
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
 
-  #     - name: Run ESLint
-  #       run: |
-  #         cd frontend
-  #         npm run lint
+      - name: Run ESLint
+        run: |
+          cd frontend
+          npm run lint
 
-  #     - name: Run Prettier
-  #       run: |
-  #         cd frontend
-  #         npm run format -- --check
+      - name: Run Prettier
+        run: |
+          cd frontend
+          npm run check-format

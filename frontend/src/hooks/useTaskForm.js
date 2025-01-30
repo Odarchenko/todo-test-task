@@ -6,14 +6,14 @@ export const useTaskForm = (todos, setTodos, showAlert) => {
   const [currentTodo, setCurrentTodo] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
-    description: ''
+    description: '',
   });
 
   const handleShowModal = (todo = null) => {
     setCurrentTodo(todo);
     setFormData({
       title: todo ? todo.title : '',
-      description: todo ? todo.description : ''
+      description: todo ? todo.description : '',
     });
     setShowModal(true);
   };
@@ -32,9 +32,11 @@ export const useTaskForm = (todos, setTodos, showAlert) => {
         if (response.errors) {
           showAlert(response.errors.join(', '), 'danger');
         } else {
-          setTodos(todos.map(todo =>
-            todo.id === currentTodo.id ? response.data : todo
-          ));
+          setTodos(
+            todos.map((todo) =>
+              todo.id === currentTodo.id ? response.data : todo
+            )
+          );
           showAlert('Task updated successfully');
         }
       } else {
@@ -48,7 +50,10 @@ export const useTaskForm = (todos, setTodos, showAlert) => {
       }
       handleCloseModal();
     } catch (err) {
-      showAlert(err.response?.data?.errors?.join(', ') || 'Failed to save task', 'danger');
+      showAlert(
+        err.response?.data?.errors?.join(', ') || 'Failed to save task',
+        'danger'
+      );
       console.error('Error saving todo:', err);
     }
   };
@@ -60,6 +65,6 @@ export const useTaskForm = (todos, setTodos, showAlert) => {
     handleShowModal,
     handleCloseModal,
     handleSubmit,
-    setFormData
+    setFormData,
   };
 };

@@ -3,7 +3,7 @@ import Item from './Item';
 
 const List = ({ todos, onStatusChange, onEdit, onDelete }) => (
   <ListGroup>
-    {todos.map(todo => (
+    {todos.map((todo) => (
       <Item
         key={todo.id}
         todo={todo}
