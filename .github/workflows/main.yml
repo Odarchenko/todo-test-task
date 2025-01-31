@@ -72,10 +72,11 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14' # Specify your Node.js version here
+          node-version: '23.6.1'
 
       - name: Install frontend dependencies
         run: |
+          npm install
           cd frontend
           rm -rf node_modules
           npm install
