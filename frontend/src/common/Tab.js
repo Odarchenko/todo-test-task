@@ -1,3 +1,4 @@
+import React from 'react';
 import { Tab as BootstrapTab } from 'react-bootstrap';
 
 const Tab = ({ eventKey, title, children }) => (

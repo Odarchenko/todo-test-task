@@ -1,3 +1,4 @@
+import React from 'react';
 import { Tabs as BootstrapTabs } from 'react-bootstrap';
 import Tab from '../common/Tab';
 import List from './List';

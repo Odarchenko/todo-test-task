@@ -1,3 +1,4 @@
+import React from 'react';
 import { Modal as BootstrapModal, Form, Button } from 'react-bootstrap';
 
 const Modal = ({ show, todo, formData, onClose, onSubmit, onChange }) => (

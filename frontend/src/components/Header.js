@@ -1,3 +1,4 @@
+import React from 'react';
 import Button from '../common/Button';
 
 export const Header = ({ onAddClick }) => (
