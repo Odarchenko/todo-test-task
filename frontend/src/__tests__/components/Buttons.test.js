@@ -1,39 +1,69 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import Buttons from '../../components/Buttons';
 
 describe('Buttons Component', () => {
-  const todo = { id: 1, title: 'Test Todo', completed: false };
-  const onStatusChange = jest.fn();
-  const onEdit = jest.fn();
-  const onDelete = jest.fn();
+  const mockOnStatusChange = jest.fn();
+  const mockOnEdit = jest.fn();
+  const mockOnDelete = jest.fn();
 
-  test('renders buttons with correct text', () => {
-    render(
+  const todo = { id: 1, completed: false };
+
+  test('renders correctly', () => {
+    const { getByText } = render(
       <Buttons
         todo={todo}
-        onStatusChange={onStatusChange}
-        onEdit={onEdit}
-        onDelete={onDelete}
+        onStatusChange={mockOnStatusChange}
+        onEdit={mockOnEdit}
+        onDelete={mockOnDelete}
       />
     );
 
-    expect(screen.getByText(/Complete/i)).toBeInTheDocument();
-    expect(screen.getByText(/Edit/i)).toBeInTheDocument();
-    expect(screen.getByText(/Delete/i)).toBeInTheDocument();
+    expect(getByText('Completed')).toBeInTheDocument();
+    expect(getByText('⋮')).toBeInTheDocument();
   });
 
-  test('calls onStatusChange when Complete button is clicked', () => {
-    render(
+  test('calls onStatusChange when status button is clicked', () => {
+    const { getByText } = render(
       <Buttons
         todo={todo}
-        onStatusChange={onStatusChange}
-        onEdit={onEdit}
-        onDelete={onDelete}
+        onStatusChange={mockOnStatusChange}
+        onEdit={mockOnEdit}
+        onDelete={mockOnDelete}
       />
     );
 
-    screen.getByText(/Complete/i).click();
-    expect(onStatusChange).toHaveBeenCalledWith(todo.id);
+    fireEvent.click(getByText('Completed'));
+    expect(mockOnStatusChange).toHaveBeenCalledWith(todo.id);
+  });
+
+  test('calls onEdit when edit is clicked', () => {
+    const { getByText } = render(
+      <Buttons
+        todo={todo}
+        onStatusChange={mockOnStatusChange}
+        onEdit={mockOnEdit}
+        onDelete={mockOnDelete}
+      />
+    );
+
+    fireEvent.click(getByText('⋮'));
+    fireEvent.click(getByText('Edit'));
+    expect(mockOnEdit).toHaveBeenCalledWith(todo);
+  });
+
+  test('calls onDelete when delete is clicked', () => {
+    const { getByText } = render(
+      <Buttons
+        todo={todo}
+        onStatusChange={mockOnStatusChange}
+        onEdit={mockOnEdit}
+        onDelete={mockOnDelete}
+      />
+    );
+
+    fireEvent.click(getByText('⋮'));
+    fireEvent.click(getByText('Delete'));
+    expect(mockOnDelete).toHaveBeenCalledWith(todo.id);
   });
 });

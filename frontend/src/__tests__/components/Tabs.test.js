@@ -23,6 +23,6 @@ describe('Tabs Component', () => {
 
     expect(screen.getByText(/All \(2\)/i)).toBeInTheDocument();
     expect(screen.getByText(/Pending \(1\)/i)).toBeInTheDocument();
-    expect(screen.getByText(/Finished \(1\)/i)).toBeInTheDocument();
+    expect(screen.getByText(/Completed \(1\)/i)).toBeInTheDocument();
   });
 });

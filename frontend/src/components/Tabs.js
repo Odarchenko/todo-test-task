@@ -25,8 +25,8 @@ const Tabs = ({ todos, onStatusChange, onEdit, onDelete }) => (
       />
     </Tab>
     <Tab
-      eventKey="finished"
-      title={`Finished (${todos.filter((t) => t.completed).length})`}
+      eventKey="completed"
+      title={`Completed (${todos.filter((t) => t.completed).length})`}
     >
       <List
         todos={todos.filter((todo) => todo.completed)}
