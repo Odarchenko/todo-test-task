@@ -15,3 +15,8 @@ code {
 .w-100px {
   width: 100px !important;
 }
+
+.no-arrow::after,
+.dots-toggle::after {
+  display: none !important;
+}

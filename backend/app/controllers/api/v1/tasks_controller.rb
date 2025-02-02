@@ -6,7 +6,7 @@ module Api
       before_action :set_task, only: [ :update, :destroy ]
 
       def index
-        tasks = Task.all
+        tasks = Task.all.order(completed: :asc)
 
         render json: tasks, each_serializer: TaskSerializer, status: :ok
       end
