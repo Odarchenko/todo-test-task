@@ -1,15 +1,18 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Button from '../common/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 const Buttons = ({ todo, onStatusChange, onEdit, onDelete }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="d-flex gap-2">
       <Button
         variant={todo.completed ? 'warning' : 'success'}
         onClick={() => onStatusChange(todo.id)}
       >
-        {todo.completed ? 'Pending' : 'Completed'}
+        {todo.completed ? t('pending') : t('completed')}
       </Button>
       <Dropdown>
         <Dropdown.Toggle
@@ -21,9 +24,11 @@ const Buttons = ({ todo, onStatusChange, onEdit, onDelete }) => {
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
-          <Dropdown.Item onClick={() => onEdit(todo)}>Edit</Dropdown.Item>
+          <Dropdown.Item onClick={() => onEdit(todo)}>
+            {t('edit')}
+          </Dropdown.Item>
           <Dropdown.Item onClick={() => onDelete(todo.id)}>
-            Delete
+            {t('delete')}
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { TasksService } from '../services/api';
+import { useTranslation } from 'react-i18next';
 
 export const useTaskForm = (todos, setTodos, showAlert) => {
+  const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [currentTodo, setCurrentTodo] = useState(null);
   const [formData, setFormData] = useState({
@@ -37,7 +39,7 @@ export const useTaskForm = (todos, setTodos, showAlert) => {
               todo.id === currentTodo.id ? response.data : todo
             )
           );
-          showAlert('Task updated successfully');
+          showAlert(t('taskUpdatedSuccess'));
         }
       } else {
         const response = await TasksService.create(formData);
@@ -45,13 +47,13 @@ export const useTaskForm = (todos, setTodos, showAlert) => {
           showAlert(response.errors.join(', '), 'danger');
         } else {
           setTodos([...todos, response.data]);
-          showAlert('Task created successfully');
+          showAlert(t('taskCreatedSuccess'));
         }
       }
       handleCloseModal();
     } catch (err) {
       showAlert(
-        err.response?.data?.errors?.join(', ') || 'Failed to save task',
+        err.response?.data?.errors?.join(', ') || t('failedToSaveTask'),
         'danger'
       );
       console.error('Error saving todo:', err);

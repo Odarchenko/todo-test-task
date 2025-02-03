@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import Button from '../../common/Button'; // Adjust the import based on your file structure
+import Button from '../../common/Button';
 
 describe('Button Component', () => {
   test('renders button with correct text', () => {
@@ -13,6 +13,4 @@ describe('Button Component', () => {
     const { container } = render(<Button variant="secondary">Test</Button>);
     expect(container.firstChild).toHaveClass('btn-secondary');
   });
-
-  // Add more tests as needed
 });

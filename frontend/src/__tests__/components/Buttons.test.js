@@ -1,21 +1,22 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import Buttons from '../../components/Buttons';
+import '../test-utils';
 
 describe('Buttons Component', () => {
-  const mockOnStatusChange = jest.fn();
-  const mockOnEdit = jest.fn();
-  const mockOnDelete = jest.fn();
+  const todo = {
+    id: 1,
+    title: 'Test Todo',
+    completed: false,
+  };
 
-  const todo = { id: 1, completed: false };
-
-  test('renders correctly', () => {
+  it('renders correctly', () => {
     const { getByText } = render(
       <Buttons
         todo={todo}
-        onStatusChange={mockOnStatusChange}
-        onEdit={mockOnEdit}
-        onDelete={mockOnDelete}
+        onStatusChange={() => {}}
+        onEdit={() => {}}
+        onDelete={() => {}}
       />
     );
 
@@ -23,13 +24,14 @@ describe('Buttons Component', () => {
     expect(getByText('⋮')).toBeInTheDocument();
   });
 
-  test('calls onStatusChange when status button is clicked', () => {
+  it('calls onStatusChange when status button is clicked', () => {
+    const mockOnStatusChange = jest.fn();
     const { getByText } = render(
       <Buttons
         todo={todo}
         onStatusChange={mockOnStatusChange}
-        onEdit={mockOnEdit}
-        onDelete={mockOnDelete}
+        onEdit={() => {}}
+        onDelete={() => {}}
       />
     );
 
@@ -37,13 +39,14 @@ describe('Buttons Component', () => {
     expect(mockOnStatusChange).toHaveBeenCalledWith(todo.id);
   });
 
-  test('calls onEdit when edit is clicked', () => {
+  it('calls onEdit when edit is clicked', () => {
+    const mockOnEdit = jest.fn();
     const { getByText } = render(
       <Buttons
         todo={todo}
-        onStatusChange={mockOnStatusChange}
+        onStatusChange={() => {}}
         onEdit={mockOnEdit}
-        onDelete={mockOnDelete}
+        onDelete={() => {}}
       />
     );
 
@@ -52,12 +55,13 @@ describe('Buttons Component', () => {
     expect(mockOnEdit).toHaveBeenCalledWith(todo);
   });
 
-  test('calls onDelete when delete is clicked', () => {
+  it('calls onDelete when delete is clicked', () => {
+    const mockOnDelete = jest.fn();
     const { getByText } = render(
       <Buttons
         todo={todo}
-        onStatusChange={mockOnStatusChange}
-        onEdit={mockOnEdit}
+        onStatusChange={() => {}}
+        onEdit={() => {}}
         onDelete={mockOnDelete}
       />
     );

@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { TasksService } from '../services/api';
+import { useTranslation } from 'react-i18next';
 
 export const useTodos = (showAlert) => {
+  const { t } = useTranslation();
   const [todos, setTodos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasFetched, setHasFetched] = useState(false);
@@ -11,20 +13,20 @@ export const useTodos = (showAlert) => {
       const response = await TasksService.fetchAll();
       setTodos(response.data);
     } catch (err) {
-      showAlert('Failed to fetch todos', 'danger');
+      showAlert(t('failedToFetchTodos'), 'danger');
       console.error('Error fetching todos:', err);
     } finally {
       setIsLoading(false);
     }
-  }, [showAlert]);
+  }, [showAlert, t]);
 
   const handleDelete = async (id) => {
     try {
       await TasksService.delete(id);
       setTodos(todos.filter((todo) => todo.id !== id));
-      showAlert('Task deleted successfully');
+      showAlert(t('taskDeletedSuccess'));
     } catch (err) {
-      showAlert('Failed to delete task', 'danger');
+      showAlert(t('failedToDeleteTask'), 'danger');
       console.error('Error deleting todo:', err);
     }
   };
@@ -37,10 +39,14 @@ export const useTodos = (showAlert) => {
       });
       setTodos(todos.map((t) => (t.id === id ? response.data : t)));
       showAlert(
-        `Task marked as ${response.data.completed ? 'completed' : 'pending'}`
+        t(
+          response.data.completed
+            ? 'taskMarkedAsCompleted'
+            : 'taskMarkedAsPending'
+        )
       );
     } catch (err) {
-      showAlert('Failed to update task status', 'danger');
+      showAlert(t('failedToUpdateTaskStatus'), 'danger');
       console.error('Error updating todo status:', err);
     }
   };
