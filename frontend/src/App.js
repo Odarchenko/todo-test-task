@@ -27,11 +27,13 @@ function App() {
 
   return (
     <Container className="mt-4">
-      <Alert
-        message={alert?.message}
-        type={alert?.type}
-        onClose={() => setAlert(null)}
-      />
+      {!showModal && alert && (
+        <Alert
+          message={alert.message}
+          type={alert.type}
+          onClose={() => setAlert(null)}
+        />
+      )}
       <Header onAddClick={() => handleShowModal()} />
 
       <Tabs
@@ -48,6 +50,8 @@ function App() {
         onClose={handleCloseModal}
         onSubmit={handleSubmit}
         onChange={setFormData}
+        alert={alert}
+        onAlertClose={() => setAlert(null)}
       />
     </Container>
   );
