@@ -6,8 +6,8 @@ const resources = {
     translation: {
       todoList: 'Todo List',
       addTodo: 'Add Todo',
-      pending: 'Pending',
-      completed: 'Completed',
+      pending: 'Move to Pending',
+      completed: 'Move to Completed',
       edit: 'Edit',
       delete: 'Delete',
       editTodo: 'Edit Todo',

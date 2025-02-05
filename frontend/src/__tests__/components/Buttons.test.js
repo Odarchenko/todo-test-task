@@ -20,7 +20,7 @@ describe('Buttons Component', () => {
       />
     );
 
-    expect(getByText('Completed')).toBeInTheDocument();
+    expect(getByText('Move to Completed')).toBeInTheDocument();
     expect(getByText('⋮')).toBeInTheDocument();
   });
 
@@ -35,7 +35,7 @@ describe('Buttons Component', () => {
       />
     );
 
-    fireEvent.click(getByText('Completed'));
+    fireEvent.click(getByText('Move to Completed'));
     expect(mockOnStatusChange).toHaveBeenCalledWith(todo.id);
   });
 

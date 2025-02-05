@@ -12,8 +12,8 @@ code {
     monospace;
 }
 
-.w-100px {
-  width: 100px !important;
+.w-150px {
+  width: 150px !important;
 }
 
 .no-arrow::after,
